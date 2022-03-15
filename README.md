@@ -7,4 +7,4 @@ It's meant ti be used as a user navigation aid. As the user visit different elem
 
 ## Example
 
-![Crumb Navigation menu](sample/crumb_sample.gif)
+![Crumb Navigation menu](sample/crumb_sample.png)
