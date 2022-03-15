@@ -1,0 +1,106 @@
+/* 
+Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-breadcrumb-links-with-css
+*/
+
+.crumbs ul {
+  margin: 0;
+  list-style: none;
+  display: inline-table;
+}
+  .crumbs ul li {
+    display: inline;
+  }
+
+  .crumbs ul li a {
+    display: block;
+    float: left;
+    height: 40px;
+    background: #66A3CC;
+    text-align: center;
+    padding: 4px 14px 8px 26px;
+    position: relative;
+    margin: 0 7px 0 0; 
+    
+    font-size: 14px;
+    line-height: 18px;
+    text-decoration: none;
+    color: #fff;
+  }
+    .crumbs ul li a:after {
+      content: "";  
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+        border-left: 20px solid #66A3CC;
+      position: absolute; right: -20px; top: 0;
+      z-index: 1;
+    }
+    .crumbs ul li a:before {
+      content: "";  
+      border-top: 20px solid transparent;
+        border-bottom: 20px solid transparent;
+        border-left: 20px solid #ffffff;
+      position: absolute; left: 0; top: 0;
+    }
+      .crumbs ul li.active:first-child a,
+      .crumbs ul li:first-child a {
+        border-top-left-radius: 6px;
+        border-bottom-left-radius: 6px;
+        background-color: #29A33D;
+      }
+      .crumbs ul li.active:first-child a:after,
+      .crumbs ul li:first-child a:after {
+            border-left: 20px solid #29A33D;
+      }
+      .crumbs ul li:first-child a:before {
+        display: none; 
+      }
+      
+      .crumbs ul li:last-child a {
+        padding-right: 30px;
+        border-top-right-radius: 6px; border-bottom-right-radius: 6px;
+      }
+      .crumbs ul li:last-child a:after {
+        display: none; 
+      }
+    
+  .crumbs ul li a span.who {
+    font-size: 12px;
+  }
+  .crumbs ul li:last-child a span.removeCrumb {
+    right: 7px;
+  }
+  .crumbs ul li a span.removeCrumb.allowN {
+    display: none;
+  }
+  .crumbs ul li a span.removeCrumb {
+    position: absolute;
+    right: -3px;
+    top: 8px;
+    padding: 3px;
+    color: #DDD;
+  }
+  .crumbs ul li a span.removeCrumb:hover {
+    color: #C33;
+  }
+    .crumbs ul li.active a {
+      background: #3498db;
+    }
+      .crumbs ul li.active a:after,
+      .crumbs ul li a:hover:after {
+        border-left-color: #3498db;
+      }
+
+    .crumbs ul li a.inactive {
+      background: #BDCFDB;
+    }
+    .crumbs ul li a.inactive:after {
+        border-left: 20px solid #BDCFDB;
+    }
+    .crumbs ul li a.inactive:hover:after {
+        border-left: 20px solid #3498db;
+    }
+
+    .crumbs ul li a.inactive:hover,
+    .crumbs ul li a:hover {
+      background: #3498db!important;
+    }
