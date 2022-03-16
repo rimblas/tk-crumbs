@@ -2,20 +2,26 @@
 Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-breadcrumb-links-with-css
 */
 
+/*  suggested color
+
+:root {
+--u-color-1-menu: #309fdb;
+}
+*/
+
 .crumbs ul {
-  margin: 0;
+  margin: 0 0 .8rem 0;
   list-style: none;
   display: inline-table;
 }
   .crumbs ul li {
-    display: inline;
+    display: inline-block;
   }
 
   .crumbs ul li a {
-    display: block;
-    float: left;
+    display: inline-block;
     height: 40px;
-    background: #66A3CC;
+    background: var(--u-color-1-menu);
     text-align: center;
     padding: 4px 14px 8px 26px;
     position: relative;
@@ -30,7 +36,7 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
       content: "";  
       border-top: 20px solid transparent;
       border-bottom: 20px solid transparent;
-        border-left: 20px solid #66A3CC;
+        border-left: 20px solid var(--u-color-1-menu);
       position: absolute; right: -20px; top: 0;
       z-index: 1;
     }
@@ -45,11 +51,11 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
       .crumbs ul li:first-child a {
         border-top-left-radius: 6px;
         border-bottom-left-radius: 6px;
-        background-color: #29A33D;
+        background-color: var(--u-color-1-menu);
       }
       .crumbs ul li.active:first-child a:after,
       .crumbs ul li:first-child a:after {
-            border-left: 20px solid #29A33D;
+            border-left: 20px solid var(--u-color-1-menu);
       }
       .crumbs ul li:first-child a:before {
         display: none; 
@@ -83,7 +89,7 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
     color: #C33;
   }
     .crumbs ul li.active a {
-      background: #3498db;
+      background: var(--u-color-1-menu);
     }
       .crumbs ul li.active a:after,
       .crumbs ul li a:hover:after {
@@ -96,11 +102,18 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
     .crumbs ul li a.inactive:after {
         border-left: 20px solid #BDCFDB;
     }
+
     .crumbs ul li a.inactive:hover:after {
-        border-left: 20px solid #3498db;
+        border-left: 20px solid var(--u-color-1-menu);
     }
 
     .crumbs ul li a.inactive:hover,
     .crumbs ul li a:hover {
-      background: #3498db!important;
+      background: var(--u-color-1-menu)!important;
     }
+
+.crumbs .t-Icon {
+    position: relative;
+    top: 2px;
+    color: #fff;
+}
