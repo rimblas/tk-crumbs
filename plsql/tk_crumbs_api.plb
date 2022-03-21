@@ -244,7 +244,8 @@ begin
     from tk_crumbs
    where entity_type = p_entity_type
      and view_user = g_user
-     and current_flag = 'Y';
+     and current_flag = 'Y'
+   fetch first 1 rows only;  -- we expect only one but add protection
 
   return l_rec;
 
@@ -336,6 +337,8 @@ begin
 end push;
 
 
+
+
 -- Overloaded push
 procedure push(
     p_entity_type  in tk_crumbs.entity_type%type
@@ -387,7 +390,18 @@ end pop;
 
 
 
--- Removes a crumb from the stack if a user clicks on x
+/**
+ * Removes a crumb from the stack if a user clicks on x (removeCrumb class)
+ *
+ *
+ * @example
+ * 
+ * @author Jorge Rimblas
+ * @created Monday, March 14, 2022
+ * @param p_entity_type
+ * @param p_entity_id
+ * @return number of entries in the stack
+ */
 procedure remove_crumb(p_id  in tk_crumbs.id%type)
 is
   l_scope  logger_logs.scope%type := gc_scope_prefix || 'remove_crumb';
@@ -407,8 +421,26 @@ begin
 end remove_crumb;
 
 
--- Calls remove_crumb with apex_application.g_x01
--- Mean to be called form AJAX and returns {success:true}
+
+
+/**
+ * Overloaded call on remove_crumb
+ * Will use apex_application.g_x01 as a parameter and it is meant to be called
+ * form AJAX and returns {success:true}
+ *
+ * @example
+ *
+ * Create an OnDemand Process called 'REMOVE_CRUMB'
+ * with the code `tk_crumbs_api.remove_crumb;`
+ * This code is called by the js:
+ * `tk.crumbs.removeCrumb(crumbID);`
+ *
+ * 
+ * @author Jorge Rimblas
+ * @created Monday, March 14, 2022
+ * @param apex_application.g_x01 implicit
+ * @return JSON {success:true}
+ */
 procedure remove_crumb
 is
   l_scope  logger_logs.scope%type := gc_scope_prefix || 'remove_crumb2';

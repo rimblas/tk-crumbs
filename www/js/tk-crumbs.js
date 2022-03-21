@@ -13,7 +13,7 @@ tk.crumbs = {
   },
 
 
-  removeCrumb: function(pID, callback) {
+  removeCrumb: function(pID) {
 
       apex.server.process(
           'REMOVE_CRUMB', {

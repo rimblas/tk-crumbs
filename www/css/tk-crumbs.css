@@ -2,17 +2,27 @@
 Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-breadcrumb-links-with-css
 */
 
-/*  suggested color
-
+/*  suggested colors */
 :root {
 --u-color-1-menu: #309fdb;
+--u-color-2-menu: #13b6cf;
 }
-*/
+
+/* Allow long lists to scroll */
+div.crumbs {overflow: scroll;}
+.crumbs > div {width: max-content;}
+
+.crumbs button .t-Icon {color: inherit;}
+.crumbs button.crumbActionsBtn {
+    height: 3.5rem;
+    vertical-align: top;
+}
 
 .crumbs ul {
   margin: 0 0 .8rem 0;
   list-style: none;
   display: inline-table;
+  width: max-content;
 }
   .crumbs ul li {
     display: inline-block;
@@ -20,57 +30,58 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
 
   .crumbs ul li a {
     display: inline-block;
-    height: 40px;
-    background: var(--u-color-1-menu);
+    height: 2.6em;
     text-align: center;
-    padding: 4px 14px 8px 26px;
+    padding: 4px 16px 8px 26px;
     position: relative;
     margin: 0 7px 0 0; 
     
-    font-size: 14px;
-    line-height: 18px;
+    font-size: 1em;
+    line-height: 1.1em;
     text-decoration: none;
     color: #fff;
   }
     .crumbs ul li a:after {
       content: "";  
-      border-top: 20px solid transparent;
-      border-bottom: 20px solid transparent;
-        border-left: 20px solid var(--u-color-1-menu);
-      position: absolute; right: -20px; top: 0;
+      border-top: 1.3em solid transparent;
+      border-bottom: 1.3em solid transparent;
+        border-left: 1.4em solid var(--u-color-2-menu);
+      position: absolute; right: -1.4em; top: 0;
       z-index: 1;
     }
     .crumbs ul li a:before {
       content: "";  
-      border-top: 20px solid transparent;
-        border-bottom: 20px solid transparent;
-        border-left: 20px solid #ffffff;
+      border-top: 1.3em solid transparent;
+        border-bottom: 1.3em solid transparent;
+        border-left: 1.4em solid #ffffff;
       position: absolute; left: 0; top: 0;
     }
       .crumbs ul li.active:first-child a,
       .crumbs ul li:first-child a {
         border-top-left-radius: 6px;
         border-bottom-left-radius: 6px;
-        background-color: var(--u-color-1-menu);
+        background-color: var(--u-color-2-menu);
+        padding-left: 1.4em;
       }
       .crumbs ul li.active:first-child a:after,
       .crumbs ul li:first-child a:after {
-            border-left: 20px solid var(--u-color-1-menu);
+            border-left: 20px solid var(--u-color-2-menu);
       }
       .crumbs ul li:first-child a:before {
         display: none; 
       }
       
       .crumbs ul li:last-child a {
-        padding-right: 30px;
-        border-top-right-radius: 6px; border-bottom-right-radius: 6px;
+        padding-right: 1.4em;
+        border-top-right-radius: 6px;
+        border-bottom-right-radius: 6px;
       }
       .crumbs ul li:last-child a:after {
         display: none; 
       }
     
   .crumbs ul li a span.who {
-    font-size: 12px;
+    font-size: .8em;
   }
   .crumbs ul li:last-child a span.removeCrumb {
     right: 7px;
@@ -80,8 +91,8 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
   }
   .crumbs ul li a span.removeCrumb {
     position: absolute;
-    right: -3px;
-    top: 8px;
+    right: -5px;
+    top: 7px;
     padding: 3px;
     color: #DDD;
   }
@@ -89,11 +100,13 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
     color: #C33;
   }
     .crumbs ul li.active a {
-      background: var(--u-color-1-menu);
+      background: var(--u-color-2-menu);
     }
-      .crumbs ul li.active a:after,
+      .crumbs ul li.active a:after {
+         border-left-color: var(--u-color-2-menu);
+      }
       .crumbs ul li a:hover:after {
-        border-left-color: #3498db;
+        border-left-color: var(--u-color-1-menu);
       }
 
     .crumbs ul li a.inactive {
@@ -107,6 +120,17 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
         border-left: 20px solid var(--u-color-1-menu);
     }
 
+    .crumbs ul li.current:first-child a,
+    .crumbs ul li.current a {
+      background-color: var(--u-color-1-menu);
+    }
+
+    .crumbs ul li.current:first-child a:after,
+    .crumbs ul li:first-child a:hover:after,
+    .crumbs ul li.current a:after {
+        border-left-color: var(--u-color-1-menu);
+    }
+
     .crumbs ul li a.inactive:hover,
     .crumbs ul li a:hover {
       background: var(--u-color-1-menu)!important;
@@ -114,6 +138,5 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
 
 .crumbs .t-Icon {
     position: relative;
-    top: 2px;
     color: #fff;
 }
