@@ -12,6 +12,7 @@ create table tk_crumbs (
   , seq_id          number        not null
   , active_ind      varchar2(1)   not null
   , current_flag    varchar2(1)
+  , completed_flag  varchar2(1)
   , created_by      varchar2(60)  default 
 coalesce(
     sys_context('APEX$SESSION','app_user')
@@ -25,6 +26,8 @@ coalesce(
       check (active_ind in ('Y', 'N'))
   , constraint tk_crumbs_ck_current
       check (current_flag = 'Y')
+  , constraint tk_crumbs_ck_current
+      check (completed_flag = 'Y')
 )
 enable primary key using index
 /
@@ -38,6 +41,7 @@ comment on column tk_crumbs.view_user is 'Unique order/id of a crumb type for a 
 comment on column tk_crumbs.seq_id is 'Order/id of a crumb type for a user';
 comment on column tk_crumbs.active_ind is 'Is the entity enabled Y/N?';
 comment on column tk_crumbs.current_flag is 'Is the entity current Y/null? Only one current allowed';
+comment on column tk_crumbs.completed_flag is 'Is the entity completed Y/null? Used when the crumb is an actionable item';
 comment on column tk_crumbs.created_by is 'User that created this record';
 comment on column tk_crumbs.created_on is 'Date the record was first created';
 comment on column tk_crumbs.last_updated_by is 'User that last modified this record';

@@ -11,8 +11,18 @@ procedure reset_crumb_stack(
   p_entity_type  in tk_crumbs.entity_type%type
 );
 
+function crumb_on_stack(
+    p_entity_type  in tk_crumbs.entity_type%type
+  , p_entity_id    in tk_crumbs.entity_id%type
+)
+return tk_crumbs.id%type;
+
 function get_current_stack_entry(p_entity_type  in tk_crumbs.entity_type%type) return tk_crumbs%rowtype;
 
+procedure touch(
+    p_entity_type  in tk_crumbs.entity_type%type
+  , p_entity_id    in tk_crumbs.entity_id%type
+);
 
 function push(
     p_entity_type  in tk_crumbs.entity_type%type
@@ -24,7 +34,7 @@ procedure push(
     p_entity_type  in tk_crumbs.entity_type%type
   , p_entity_id    in tk_crumbs.entity_id%type
 );
-
+procedure push;
 
 function pop(
      p_entity_type in tk_crumbs.entity_type%type
@@ -33,6 +43,9 @@ return tk_crumbs.id%type;
 
 procedure remove_crumb(p_id  in tk_crumbs.id%type);
 procedure remove_crumb;
+
+procedure toggle_crumb_done(p_id  in tk_crumbs.id%type);
+procedure toggle_crumb_done;
 
 
 end tk_crumbs_api;

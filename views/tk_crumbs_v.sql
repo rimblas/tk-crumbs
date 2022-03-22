@@ -7,6 +7,7 @@ select id
      , seq_id
      , active_ind
      , current_flag
+     , completed_flag
      , created_by
      , created_on
      , last_updated_by

@@ -6,6 +6,8 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
 :root {
 --u-color-1-menu: #309fdb;
 --u-color-2-menu: #13b6cf;
+--u-color-inactive: #bdcfdb;
+--u-color-complete: #3caf85;
 }
 
 /* Allow long lists to scroll */
@@ -13,6 +15,12 @@ div.crumbs {overflow: scroll;}
 .crumbs > div {width: max-content;}
 
 .crumbs button .t-Icon {color: inherit;}
+.crumbs button.crumbActionsBtn {
+  display: none;
+}
+.crumbs.js-hasActions button.crumbActionsBtn {
+  display: inline-block;
+}
 .crumbs button.crumbActionsBtn {
     height: 3.5rem;
     vertical-align: top;
@@ -60,12 +68,7 @@ div.crumbs {overflow: scroll;}
       .crumbs ul li:first-child a {
         border-top-left-radius: 6px;
         border-bottom-left-radius: 6px;
-        background-color: var(--u-color-2-menu);
         padding-left: 1.4em;
-      }
-      .crumbs ul li.active:first-child a:after,
-      .crumbs ul li:first-child a:after {
-            border-left: 20px solid var(--u-color-2-menu);
       }
       .crumbs ul li:first-child a:before {
         display: none; 
@@ -96,8 +99,16 @@ div.crumbs {overflow: scroll;}
     padding: 3px;
     color: #DDD;
   }
+  .crumbs ul li a span.checkCrumb {
+    position: absolute;
+    right: 0;
+    top: 4px;
+    color: #DDD;
+    display: none;
+  }
   .crumbs ul li a span.removeCrumb:hover {
     color: #C33;
+    opacity: 1;
   }
     .crumbs ul li.active a {
       background: var(--u-color-2-menu);
@@ -110,10 +121,10 @@ div.crumbs {overflow: scroll;}
       }
 
     .crumbs ul li a.inactive {
-      background: #BDCFDB;
+      background: var(--u-color-inactive);
     }
     .crumbs ul li a.inactive:after {
-        border-left: 20px solid #BDCFDB;
+        border-left: 20px solid var(--u-color-inactive);
     }
 
     .crumbs ul li a.inactive:hover:after {
@@ -131,6 +142,17 @@ div.crumbs {overflow: scroll;}
         border-left-color: var(--u-color-1-menu);
     }
 
+    .crumbs ul li.done:first-child a,
+    .crumbs ul li.done a {
+      background-color: var(--u-color-complete);
+    }
+
+    .crumbs ul li.done:first-child a:after,
+    .crumbs ul li.done a:after {
+        border-left-color: var(--u-color-complete);
+    }
+
+
     .crumbs ul li a.inactive:hover,
     .crumbs ul li a:hover {
       background: var(--u-color-1-menu)!important;
@@ -139,4 +161,24 @@ div.crumbs {overflow: scroll;}
 .crumbs .t-Icon {
     position: relative;
     color: #fff;
+}
+
+div.crumbs.js-hasTodo ul li a span.checkCrumb {
+  display: inline;
+}
+div.crumbs.js-hasTodo ul li.done a span.checkCrumb fa, 
+div.crumbs.js-hasTodo ul li a span.checkCrumb:hover {
+  color: #fff;
+}
+
+div.crumbs.js-hasTodo ul li a span.removeCrumb {
+    top: unset;
+    right: -1px;
+    bottom: -1px;
+    padding: 0px;
+    color: #AAA;
+    opacity: .7;
+}
+div.crumbs.js-hasTodo ul li a span.removeCrumb {
+    opacity: 1;
 }

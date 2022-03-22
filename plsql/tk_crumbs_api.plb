@@ -44,40 +44,48 @@ end crumb_seq_on_stack;
 
 
 
--- Helper private function for managing the Crumbs Stack
--- given an entity return the ID if already present in the stack
--- otherwise return null
-function crumb_on_stack(
-    p_entity_type  in tk_crumbs.entity_type%type
-  , p_entity_id    in tk_crumbs.entity_id%type
-  )
-  return tk_crumbs.id%type
-is
-  -- l_scope  logger_logs.scope%type := gc_scope_prefix || 'crumb_on_stack';
-  -- l_params logger.tab_param;
-
-  l_id  tk_crumbs.id%TYPE;
+/**
+* Return a JSON status object of the form:
+* {"success": true}
+* or
+* {"success": false, "message": "FAILURE MESSAGE HERE"}
+*
+* @issue 
+*
+* @author Jorge Rimblas
+* @created 2018-08-01
+*/
+procedure json_status(
+      p_success in boolean default true
+    , p_message in varchar2 default null
+) 
+as
+    l_scope logger_logs.scope%type := gc_scope_prefix || 'json_status';
+    l_params logger.tab_param;
 begin
-  -- logger.append_param(l_params, 'p_param1', p_param1);
-  -- logger.log('START', l_scope, null, l_params);
+    logger.append_param(l_params, 'p_success', p_success);
+    logger.append_param(l_params, 'p_message', p_message);
+    logger.log('START', l_scope, null, l_params);
 
-  select id
-    into l_id
-    from tk_crumbs
-   where view_user = g_user
-     and entity_type = p_entity_type
-     and entity_id = p_entity_id;
+    apex_json.open_object;
+    apex_json.write(
+          p_name => 'success'
+        , p_value => p_success
+    );
+    apex_json.write(
+          p_name => 'message'
+        , p_value => p_message
+    );
+    apex_json.close_object;
 
-  return l_id;
+    logger.log('END', l_scope);
+exception
+    when others then
+        logger.log_error('Unhandled Exception', l_scope, null, l_params);
+        raise;
+end json_status;
 
-  exception
-    when NO_DATA_FOUND then
-      return null;
 
-    when OTHERS then
-      -- logger.log_error('Unhandled Exception', l_scope, null, l_params);
-      raise;
-end crumb_on_stack;
 
 
 
@@ -167,7 +175,7 @@ end add_to_stack;
  */
 procedure update_stack_pointer(
     p_entity_type  in tk_crumbs.entity_type%type
-  , p_id           in tk_crumbs.id%type  default null
+  , p_id           in tk_crumbs.id%type      default null
   , p_seq_id       in tk_crumbs.seq_id%type  default null
 )
 is
@@ -227,6 +235,58 @@ end update_stack_pointer;
 
 
 
+
+/**
+ * Given an entity return the ID if already present in the stack
+ * otherwise return null
+ *
+ *
+ * @example
+ * 
+ * @issue
+ *
+ * @author Jorge Rimblas
+ * @created Tuesday, March 15, 2022
+ * @param p_entity_type
+ * @param p_entity_id
+ * @return tk_crumbs.id%type
+ */
+function crumb_on_stack(
+    p_entity_type  in tk_crumbs.entity_type%type
+  , p_entity_id    in tk_crumbs.entity_id%type
+  )
+  return tk_crumbs.id%type
+is
+  -- l_scope  logger_logs.scope%type := gc_scope_prefix || 'crumb_on_stack';
+  -- l_params logger.tab_param;
+
+  l_id  tk_crumbs.id%TYPE;
+begin
+  -- logger.append_param(l_params, 'p_param1', p_param1);
+  -- logger.log('START', l_scope, null, l_params);
+
+  select id
+    into l_id
+    from tk_crumbs
+   where view_user = g_user
+     and entity_type = p_entity_type
+     and entity_id = p_entity_id;
+
+  return l_id;
+
+  exception
+    when NO_DATA_FOUND then
+      return null;
+
+    when OTHERS then
+      -- logger.log_error('Unhandled Exception', l_scope, null, l_params);
+      raise;
+end crumb_on_stack;
+
+
+
+
+
 -- The stack attempts to only have one crumb be CURRENT.  This function
 -- returns the record(sec, entry_id, etc) with the CURRENT crumb or NULL if none found.
 function get_current_stack_entry(p_entity_type  in tk_crumbs.entity_type%type) return tk_crumbs%rowtype
@@ -270,17 +330,56 @@ is
   l_params logger.tab_param;
 begin
   -- logger.append_param(l_params, 'p_entity_type', p_entity_type);
-  -- logger.log_information('BEGIN', l_scope, null, l_params);
+  -- logger.log('BEGIN', l_scope, null, l_params);
 
   delete from tk_crumbs where view_user = g_user and entity_type = p_entity_type;
 
-  -- logger.log_information('END', l_scope, null, l_params);
+  -- logger.log('END', l_scope, null, l_params);
 
   exception
     when OTHERS then
       logger.log_error('Unhandled Exception', l_scope, null, l_params);
       raise;
 end reset_crumb_stack;
+
+
+
+
+/**
+ * If the crumb already exists on the stack, make it current
+ *
+ *
+ * @example
+ * 
+ * @author Jorge Rimblas
+ * @created Monday, March 14, 2022
+ * @param p_entity_type
+ * @param p_entity_id
+ */
+procedure touch(
+    p_entity_type  in tk_crumbs.entity_type%type
+  , p_entity_id    in tk_crumbs.entity_id%type
+)
+is
+  l_scope  logger_logs.scope%type := gc_scope_prefix || 'touch';
+  l_params logger.tab_param;
+
+  l_id                tk_crumbs.id%TYPE;
+  l_cnt               number;
+begin
+--  logger.append_param(l_params, 'p_entity_type', p_entity_type);
+--  logger.append_param(l_params, 'p_entity_id', p_entity_id);
+--  logger.log('BEGIN', l_scope, null, l_params);
+
+  l_id := crumb_on_stack(p_entity_type, p_entity_id);
+  if l_id is not null then
+    -- entity already on the stack, make it ACTIVE and CURRENT
+    update_stack_pointer(p_entity_type => p_entity_type, p_id => l_id);
+  end if;
+
+end touch;
+
+
 
 
 
@@ -310,7 +409,7 @@ is
   l_cnt               number;
 begin
 --  logger.append_param(l_params, 'p_entity_id', p_entity_id);
---  logger.log_information('BEGIN', l_scope, null, l_params);
+--  logger.log('BEGIN', l_scope, null, l_params);
 
   l_id := crumb_on_stack(p_entity_type, p_entity_id);
   if l_id is not null then
@@ -326,7 +425,7 @@ begin
 
   select count(*) into l_cnt from tk_crumbs where view_user = g_user and entity_type = p_entity_type;
 
- -- logger.log_information('END', l_scope, null, l_params);
+ -- logger.log('END', l_scope, null, l_params);
 
   return l_cnt;
 
@@ -351,6 +450,26 @@ begin
 end push;
 
 
+/*
+-- Overloaded push for AJAX calls
+* @param apex_application.g_x01 implicit
+* @return JSON {success:true}
+*/
+procedure push
+is
+    l_cnt               number;
+begin
+  l_cnt := push(p_entity_type => apex_application.g_x01, p_entity_id => apex_application.g_x02);
+
+  json_status;
+
+
+  exception
+    when OTHERS then
+      json_status(false, sqlerrm);
+end push;
+
+
 
 
 
@@ -363,7 +482,7 @@ is
   l_stack_rec   tk_crumbs%ROWTYPE;
 begin
   -- logger.append_param(l_params, 'p_param1', p_param1);
-  -- logger.log_information('BEGIN', l_scope, null, l_params);
+  -- logger.log('BEGIN', l_scope, null, l_params);
 
   l_stack_rec := get_current_stack_entry(p_entity_type => p_entity_type);
   if l_stack_rec.seq_id is null or l_stack_rec.seq_id <= 1 then
@@ -378,7 +497,7 @@ begin
     return l_stack_rec.id;
   end if;
 
-  -- logger.log_information('END', l_scope, null, l_params);
+  -- logger.log('END', l_scope, null, l_params);
 
   exception
     when OTHERS then
@@ -398,9 +517,7 @@ end pop;
  * 
  * @author Jorge Rimblas
  * @created Monday, March 14, 2022
- * @param p_entity_type
  * @param p_entity_id
- * @return number of entries in the stack
  */
 procedure remove_crumb(p_id  in tk_crumbs.id%type)
 is
@@ -446,22 +563,86 @@ is
   l_scope  logger_logs.scope%type := gc_scope_prefix || 'remove_crumb2';
   l_params logger.tab_param;
 
-  l_seq_id      tk_crumbs.seq_id%type;
 begin
    remove_crumb(p_id => apex_application.g_x01);
 
-   apex_json.open_object;
-   apex_json.write(
-         p_name => 'success'
-       , p_value => true
-   );
-   apex_json.close_object;
+   json_status;
+
+ exception
+    when OTHERS then
+      json_status(false, sqlerrm);
+      logger.log_error('Unhandled Exception', l_scope, null, l_params);
+end remove_crumb;
+
+
+
+
+
+
+/**
+ * Toggles a crumb as completed, used when the crumbs are action items
+ *
+ *
+ * @example
+ * 
+ * @author Jorge Rimblas
+ * @created Monday, March 21, 2022
+ * @param p_entity_id
+ */
+procedure toggle_crumb_done(p_id  in tk_crumbs.id%type)
+is
+  l_scope  logger_logs.scope%type := gc_scope_prefix || 'toggle_crumb_done';
+  l_params logger.tab_param;
+
+  l_seq_id      tk_crumbs.seq_id%type;
+begin
+   update tk_crumbs
+      set completed_flag = decode(completed_flag, null, 'Y', null)
+    where view_user = g_user
+      and id = p_id;
 
  exception
     when OTHERS then
       logger.log_error('Unhandled Exception', l_scope, null, l_params);
       raise;
-end remove_crumb;
+end toggle_crumb_done;
+
+
+
+
+/**
+ * Overloaded call on toggle_crumb_done
+ * Will use apex_application.g_x01 as a parameter and it is meant to be called
+ * form AJAX and returns {success:true}
+ *
+ * @example
+ *
+ * Create an OnDemand Process called 'COMPLETE_CRUMB'
+ * with the code `tk_crumbs_api.toggle_crumb_done;`
+ * This code is called by the js:
+ * `tk.crumbs.completeCrumb(crumbID);`
+ *
+ * 
+ * @author Jorge Rimblas
+ * @created Monday, March 14, 2022
+ * @param apex_application.g_x01 implicit
+ * @return JSON {success:true}
+ */
+procedure toggle_crumb_done
+is
+  l_scope  logger_logs.scope%type := gc_scope_prefix || 'toggle_crumb_done2';
+  l_params logger.tab_param;
+
+begin
+   toggle_crumb_done(p_id => apex_application.g_x01);
+
+   json_status;
+
+ exception
+    when OTHERS then
+      json_status(false, sqlerrm);
+      logger.log_error('Unhandled Exception', l_scope, null, l_params);
+end toggle_crumb_done;
 
 
 
