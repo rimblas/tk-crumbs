@@ -107,7 +107,7 @@ div.crumbs {overflow: scroll;}
     display: none;
   }
   .crumbs ul li a span.removeCrumb:hover {
-    color: #C33;
+    color: #C33!important;
     opacity: 1;
   }
     .crumbs ul li.active a {
