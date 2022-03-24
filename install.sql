@@ -33,6 +33,8 @@ PROMPT _________________________________________________
 PROMPT
 
 @install/tk_crumbs.sql
+
+PRO .. tk_crumbs_v
 @views/tk_crumbs_v.sql
 
 

@@ -1,6 +1,6 @@
 PRO .. tk_crumbs
 
-drop table tk_crumbs cascade constraints purge;
+-- drop table tk_crumbs cascade constraints purge;
 
 -- Keep table names under 24 characters
 --           1234567890123456789012345
@@ -26,7 +26,7 @@ coalesce(
       check (active_ind in ('Y', 'N'))
   , constraint tk_crumbs_ck_current
       check (current_flag = 'Y')
-  , constraint tk_crumbs_ck_current
+  , constraint tk_crumbs_ck_complete
       check (completed_flag = 'Y')
 )
 enable primary key using index
