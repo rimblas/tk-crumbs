@@ -11,7 +11,7 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
 }
 
 /* Allow long lists to scroll */
-div.crumbs {overflow: scroll;}
+div.crumbs {overflow: auto;}
 .crumbs > div {width: max-content;}
 
 .crumbs button .t-Icon {color: inherit;}
@@ -60,8 +60,8 @@ div.crumbs {overflow: scroll;}
     .crumbs ul li a:before {
       content: "";  
       border-top: 1.3em solid transparent;
-        border-bottom: 1.3em solid transparent;
-        border-left: 1.4em solid #ffffff;
+      border-bottom: 1.3em solid transparent;
+      border-left: 1.4em solid #ffffff;
       position: absolute; left: 0; top: 0;
     }
       .crumbs ul li.active:first-child a,
@@ -75,7 +75,7 @@ div.crumbs {overflow: scroll;}
       }
       
       .crumbs ul li:last-child a {
-        padding-right: 1.4em;
+        padding-right: 1.6em;
         border-top-right-radius: 6px;
         border-bottom-right-radius: 6px;
       }
@@ -166,7 +166,7 @@ div.crumbs {overflow: scroll;}
 div.crumbs.js-hasTodo ul li a span.checkCrumb {
   display: inline;
 }
-div.crumbs.js-hasTodo ul li.done a span.checkCrumb fa, 
+div.crumbs.js-hasTodo ul li.done a span.checkCrumb, 
 div.crumbs.js-hasTodo ul li a span.checkCrumb:hover {
   color: #fff;
 }
@@ -181,4 +181,28 @@ div.crumbs.js-hasTodo ul li a span.removeCrumb {
 }
 div.crumbs.js-hasTodo ul li a span.removeCrumb {
     opacity: 1;
+}
+
+.crumbActionsBtn:before {
+    content: '';
+    display: block;
+    opacity: 0;
+    position: absolute;
+    transition-duration: .15s;
+    transition-timing-function: cubic-bezier(0.4,0.0,0.2,1);
+    z-index: -1;
+    background: none;
+    border-radius: 3%;
+    box-sizing: border-box;
+    transform: scale(0);
+    transition-property: transform,opacity;
+}
+
+.crumbActionsBtn:hover:before {
+    background-color: rgba(32,33,36,0.059);
+    border: none;
+    box-shadow: none;
+    opacity: 1;
+    transform: scale(.5);
+    z-index: 1;
 }
