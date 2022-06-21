@@ -4,10 +4,11 @@ Original CSS based on http://line25.com/tutorials/how-to-create-flat-style-bread
 
 /*  suggested colors */
 :root {
---u-color-1-menu: #309fdb;
---u-color-2-menu: #13b6cf;
---u-color-inactive: #bdcfdb;
---u-color-complete: #3caf85;
+--u-tk-color-1-menu: #309fdb;
+--u-tk-color-2-menu: #13b6cf;
+--u-tk-color-inactive: #bdcfdb;
+--u-tk-color-complete: #3caf85;
+--u-tk-background-color: #fff;
 }
 
 /* Allow long lists to scroll */
@@ -29,11 +30,13 @@ div.crumbs {overflow: auto;}
 .crumbs ul {
   margin: 0 0 .8rem 0;
   list-style: none;
-  display: inline-table;
+  display: inline-flex;
   width: max-content;
+  background: var(--u-tk-background-color);
 }
   .crumbs ul li {
-    display: inline-block;
+    display: flex;
+    vertical-align: top;
   }
 
   .crumbs ul li a {
@@ -53,7 +56,7 @@ div.crumbs {overflow: auto;}
       content: "";  
       border-top: 1.3em solid transparent;
       border-bottom: 1.3em solid transparent;
-        border-left: 1.4em solid var(--u-color-2-menu);
+        border-left: 1.4em solid var(--u-tk-color-2-menu);
       position: absolute; right: -1.4em; top: 0;
       z-index: 1;
     }
@@ -78,6 +81,7 @@ div.crumbs {overflow: auto;}
         padding-right: 1.6em;
         border-top-right-radius: 6px;
         border-bottom-right-radius: 6px;
+        margin: 0;
       }
       .crumbs ul li:last-child a:after {
         display: none; 
@@ -111,51 +115,51 @@ div.crumbs {overflow: auto;}
     opacity: 1;
   }
     .crumbs ul li.active a {
-      background: var(--u-color-2-menu);
+      background: var(--u-tk-color-2-menu);
     }
       .crumbs ul li.active a:after {
-         border-left-color: var(--u-color-2-menu);
+         border-left-color: var(--u-tk-color-2-menu);
       }
       .crumbs ul li a:hover:after {
-        border-left-color: var(--u-color-1-menu);
+        border-left-color: var(--u-tk-color-1-menu);
       }
 
     .crumbs ul li a.inactive {
-      background: var(--u-color-inactive);
+      background: var(--u-tk-color-inactive);
     }
     .crumbs ul li a.inactive:after {
-        border-left: 20px solid var(--u-color-inactive);
+        border-left: 20px solid var(--u-tk-color-inactive);
     }
 
     .crumbs ul li a.inactive:hover:after {
-        border-left: 20px solid var(--u-color-1-menu);
+        border-left: 20px solid var(--u-tk-color-1-menu);
     }
 
     .crumbs ul li.current:first-child a,
     .crumbs ul li.current a {
-      background-color: var(--u-color-1-menu);
+      background-color: var(--u-tk-color-1-menu);
     }
 
     .crumbs ul li.current:first-child a:after,
     .crumbs ul li:first-child a:hover:after,
     .crumbs ul li.current a:after {
-        border-left-color: var(--u-color-1-menu);
+        border-left-color: var(--u-tk-color-1-menu);
     }
 
     .crumbs ul li.done:first-child a,
     .crumbs ul li.done a {
-      background-color: var(--u-color-complete);
+      background-color: var(--u-tk-color-complete);
     }
 
     .crumbs ul li.done:first-child a:after,
     .crumbs ul li.done a:after {
-        border-left-color: var(--u-color-complete);
+        border-left-color: var(--u-tk-color-complete);
     }
 
 
     .crumbs ul li a.inactive:hover,
     .crumbs ul li a:hover {
-      background: var(--u-color-1-menu)!important;
+      background: var(--u-tk-color-1-menu)!important;
     }
 
 .crumbs .t-Icon {
