@@ -681,7 +681,7 @@ begin
 
   apex_json.open_object;
   apex_json.write('success',true);
-  apex_json.write('crumb_empty_ind','N');
+  apex_json.write('crumbEmpty', false);
   apex_json.close_object;
  exception
     when no_data_found then
