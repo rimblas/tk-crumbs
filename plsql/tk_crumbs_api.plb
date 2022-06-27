@@ -649,7 +649,7 @@ end toggle_crumb_done;
 
 /**
  * Will use apex_application.g_x01 as a parameter and it is meant to be called
- * form AJAX and returns {success:true,crumb_empty_ind Y or N}
+ * form AJAX and returns {success:true,crumbEmpty: true or false}
  *
  * @example
  *
