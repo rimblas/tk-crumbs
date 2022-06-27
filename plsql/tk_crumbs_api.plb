@@ -687,7 +687,7 @@ begin
     when no_data_found then
       apex_json.open_object;
       apex_json.write('success',true);
-      apex_json.write('crumb_empty_ind','Y');
+  apex_json.write('crumbEmpty', true);
       apex_json.close_object;
     when OTHERS then
       json_status(false, sqlerrm);
