@@ -80,7 +80,27 @@ tk.crumbs = {
               }
           }
       );
-  }
+  },
+
+
+
+  crumbEmptyInd: async function(pCrumbType) {
+
+    return  apex.server.process(
+         'CRUMB_EMPTY_IND', {
+             x01: pCrumbType
+         },
+         {
+             success: function(data) {
+                if (!data.success){
+                 console.log(data.message);
+                }
+             }
+         }
+     );
+ }
+
+
 };
 
 })(tk, apex.jQuery);
