@@ -661,7 +661,7 @@ end toggle_crumb_done;
  * @param apex_application.g_x01
  * @return JSON {success:true,crumb_empty_ind Y or N}
  */
-procedure crumb_empty_ind
+procedure crumb_info( p_entity_type  in tk_crumbs.entity_type%type default null )
 is
   l_scope  logger_logs.scope%type := gc_scope_prefix || 'crumb_empty_ind2';
   l_params logger.tab_param;
