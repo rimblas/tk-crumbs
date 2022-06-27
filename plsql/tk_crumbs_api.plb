@@ -670,7 +670,11 @@ is
   l_entity_type               tk_crumbs.entity_type%type;
 begin
 
+ if p_entity_type is null then
   l_entity_type := apex_application.g_x01;
+  else
+   l_entity_type := p_entity_type;
+   end if;
 
   select 1
     into l_exists
