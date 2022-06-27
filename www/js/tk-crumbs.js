@@ -84,11 +84,11 @@ tk.crumbs = {
 
 
 
-  crumbEmptyInd: async function(pCrumbType) {
+  crumbInfo: async function(pEntityType) {
 
     return  apex.server.process(
-         'CRUMB_EMPTY_IND', {
-             x01: pCrumbType
+         'CRUMB_INFO', {
+             x01: pEntityType
          },
          {
              success: function(data) {
@@ -98,7 +98,17 @@ tk.crumbs = {
              }
          }
      );
- }
+  },
+
+  askAddCrumb: async function(pEntityType) {
+
+    var crumInfo = await tk.crumbs.crumbInfo(pEntityType);
+    if (crumInfo.crumbEmpty) {
+      apex.event.trigger(document, 'tkAddReportToCrumb');
+    } else {
+      apex.event.trigger(document, 'tkCrumbAddDialog');
+    }
+  }
 
 
 };

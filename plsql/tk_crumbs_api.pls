@@ -47,7 +47,7 @@ procedure remove_crumb;
 procedure toggle_crumb_done(p_id  in tk_crumbs.id%type);
 procedure toggle_crumb_done;
 
-procedure crumb_empty_ind;
+procedure crumb_info( p_entity_type  in tk_crumbs.entity_type%type default null );
 
 end tk_crumbs_api;
 /

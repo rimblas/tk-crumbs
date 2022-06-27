@@ -653,28 +653,28 @@ end toggle_crumb_done;
  *
  * @example
  *
- * This is for verify is the CRUMB type is empty
+ * This is for verify if the CRUMB type is empty
  *
  *
  * @author Angel Flores
  * @created June 21, 2022
  * @param apex_application.g_x01
- * @return JSON {success:true,crumb_empty_ind Y or N}
+ * @return JSON {success:true,crumbEmpty  true or false}
  */
 procedure crumb_info( p_entity_type  in tk_crumbs.entity_type%type default null )
 is
-  l_scope  logger_logs.scope%type := gc_scope_prefix || 'crumb_empty_ind2';
+  l_scope  logger_logs.scope%type := gc_scope_prefix || 'crumb_info';
   l_params logger.tab_param;
 
   l_exists                    number;
   l_entity_type               tk_crumbs.entity_type%type;
 begin
 
- if p_entity_type is null then
-  l_entity_type := apex_application.g_x01;
+  if p_entity_type is null then
+    l_entity_type := apex_application.g_x01;
   else
-   l_entity_type := p_entity_type;
-   end if;
+    l_entity_type := p_entity_type;
+  end if;
 
   select 1
     into l_exists
@@ -696,7 +696,7 @@ begin
     when OTHERS then
       json_status(false, sqlerrm);
       logger.log_error('Unhandled Exception', l_scope, null, l_params);
-end crumb_empty_ind;
+end crumb_info;
 
 
 
