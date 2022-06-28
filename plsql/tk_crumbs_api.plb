@@ -658,7 +658,7 @@ end toggle_crumb_done;
  *
  * @author Angel Flores
  * @created June 21, 2022
- * @param apex_application.g_x01
+ * @param p_entity_type with apex_application.g_x01 as default
  * @return JSON {success:true,crumbEmpty  true or false}
  */
 procedure crumb_info( p_entity_type  in tk_crumbs.entity_type%type default null )
