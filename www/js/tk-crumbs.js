@@ -80,7 +80,51 @@ tk.crumbs = {
               }
           }
       );
+  },
+
+
+
+  crumbInfo: async function(pEntityType) {
+
+    return  apex.server.process(
+         'CRUMB_INFO', {
+             x01: pEntityType
+         },
+         {
+             success: function(data) {
+                if (!data.success){
+                 console.error(data.message);
+                }
+             }
+         }
+     );
+  },
+
+  /**
+   * Used when adding multiple crumbs at a time.  If the crumb is empty the 
+   * event `tkAddReportToCrumb` is triggered so the calling code can simply add the
+   * new selections to the crumb list.
+   * However, if the crumbs are not empty, `tkCrumbAddDialog` is triggered so a 
+   * Dialog that asks "Append" or "Replace" is given to the user.
+   *
+   * @example
+   * tk.crumbs.askAddCrumb("ENTITY");
+   * 
+   * @author Angel Flores
+   * @created Tuesday, June 28, 2022
+   * @param pEntityType Crumbs Entity Type
+   */
+  askAddCrumb: async function(pEntityType) {
+
+    var crumInfo = await tk.crumbs.crumbInfo(pEntityType);
+    if (crumInfo.crumbEmpty) {
+      apex.event.trigger(document, 'tkAddReportToCrumb');
+    } else {
+      apex.event.trigger(document, 'tkCrumbAddDialog');
+    }
   }
+
+
 };
 
 })(tk, apex.jQuery);

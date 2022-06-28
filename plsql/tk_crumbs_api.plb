@@ -646,6 +646,64 @@ end toggle_crumb_done;
 
 
 
+
+/**
+ * Will use apex_application.g_x01 as a parameter and it is meant to be called
+ * form AJAX and returns {success:true,crumbEmpty: true or false}
+ *
+ * @example
+ *
+ * This is for verify if the CRUMB type is empty
+ *
+ *
+ * @author Angel Flores
+ * @created June 21, 2022
+ * @param p_entity_type with apex_application.g_x01 as default
+ * @return JSON {success:true,crumbEmpty  true or false}
+ */
+procedure crumb_info( p_entity_type  in tk_crumbs.entity_type%type default null )
+is
+  l_scope  logger_logs.scope%type := gc_scope_prefix || 'crumb_info';
+  l_params logger.tab_param;
+
+  l_exists                    number;
+  l_entity_type               tk_crumbs.entity_type%type;
+begin
+
+  if p_entity_type is null then
+    l_entity_type := apex_application.g_x01;
+  else
+    l_entity_type := p_entity_type;
+  end if;
+
+  select 1
+    into l_exists
+    from tk_crumbs
+   where entity_type = l_entity_type
+     and view_user = g_user
+   fetch first rows only;
+
+  apex_json.open_object;
+  apex_json.write('success',true);
+  apex_json.write('crumbEmpty', false);
+  apex_json.close_object;
+ exception
+    when no_data_found then
+      apex_json.open_object;
+      apex_json.write('success',true);
+      apex_json.write('crumbEmpty', true);
+      apex_json.close_object;
+    when OTHERS then
+      json_status(false, sqlerrm);
+      logger.log_error('Unhandled Exception', l_scope, null, l_params);
+end crumb_info;
+
+
+
+
+
+
+
 begin
 
   g_user := coalesce(
