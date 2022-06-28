@@ -93,7 +93,7 @@ tk.crumbs = {
          {
              success: function(data) {
                 if (!data.success){
-                 console.log(data.message);
+                 console.error(data.message);
                 }
              }
          }
