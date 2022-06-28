@@ -100,6 +100,20 @@ tk.crumbs = {
      );
   },
 
+  /**
+   * Used when adding multiple crumbs at a time.  If the crumb is empty the 
+   * event `tkAddReportToCrumb` is triggered so the calling code can simply add the
+   * new selections to the crumb list.
+   * However, if the crumbs are not empty, `tkCrumbAddDialog` is triggered so a 
+   * Dialog that asks "Append" or "Replace" is given to the user.
+   *
+   * @example
+   * tk.crumbs.askAddCrumb("ENTITY");
+   * 
+   * @author Angel Flores
+   * @created Tuesday, June 28, 2022
+   * @param pEntityType Crumbs Entity Type
+   */
   askAddCrumb: async function(pEntityType) {
 
     var crumInfo = await tk.crumbs.crumbInfo(pEntityType);
